@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -14,7 +15,18 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('check-jwt', ['except' => ['login', 'register']]);
+    }
+
+    public function register(){
+        $data = \request()->validate([
+            'name' => 'required',
+            'email' => 'email|unique:users',
+            'password' => 'required|confirmed'
+        ]);
+        User::create($data);
+        return $this->login();
+
     }
 
     /**
@@ -25,7 +37,6 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }

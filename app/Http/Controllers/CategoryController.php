@@ -5,10 +5,16 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('check-jwt')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +40,7 @@ class CategoryController extends Controller
         ]);
         $data['slug'] = Str::slug($data['name']);
         Category::create($data);
-        return response(null, 201);
+        return response()->success(null, 201);
     }
 
     /**
@@ -46,7 +52,7 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         //
-        return new CategoryResource($category);
+        return response()->success(new CategoryResource($category));
 //        return $category;
     }
 
@@ -67,7 +73,7 @@ class CategoryController extends Controller
         ]);
         $data['slug'] = Str::slug($data['name']);
         $category->update($data);
-        return response($category, 200);
+        return response()->success($category, 200);
     }
 
     /**
@@ -80,6 +86,6 @@ class CategoryController extends Controller
     {
         //
         $category->delete();
-        return response('Deleted', 201);
+        return response()->success('Deleted', 201);
     }
 }

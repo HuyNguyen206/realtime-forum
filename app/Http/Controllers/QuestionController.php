@@ -10,6 +10,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class QuestionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('check-jwt')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +22,7 @@ class QuestionController extends Controller
     public function index()
     {
         //
-        return QuestionResource::collection(Question::latest()->get());
+        return \response()->success(QuestionResource::collection(Question::latest()->get()));
     }
 
 
@@ -40,7 +44,7 @@ class QuestionController extends Controller
         $data['slug'] = Str::slug($data['title']);
 //        auth()->user()->questions()->create($data);
         Question::create($data);
-        return \response('Created', Response::HTTP_CREATED);
+        return \response()->success('Created', Response::HTTP_CREATED);
     }
 
     /**
@@ -52,7 +56,7 @@ class QuestionController extends Controller
     public function show(Question $question)
     {
         //
-        return new QuestionResource($question);
+        return \response()->success(new QuestionResource($question));
     }
 
 
@@ -74,7 +78,7 @@ class QuestionController extends Controller
         ]);
         $data['slug'] = Str::slug($data['title']);
         $question->update($data);
-        return \response()->json($question, 200);
+        return \response()->success($question, 200);
     }
 
     /**
@@ -87,6 +91,6 @@ class QuestionController extends Controller
     {
         //
         $question->delete();
-        return response(null,Response::HTTP_NO_CONTENT);
+        return response()->success(null,Response::HTTP_NO_CONTENT);
     }
 }

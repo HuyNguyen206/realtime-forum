@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class LikeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('check-jwt');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -87,6 +91,6 @@ class LikeController extends Controller
 
     public function toggle(Reply $reply){
         auth()->user()->likedReplies()->toggle($reply);
-        return response('Success', 201);
+        return response()->success('Success', 201);
     }
 }
