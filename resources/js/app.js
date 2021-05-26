@@ -9,6 +9,12 @@ require('./bootstrap');
 window.Vue = require('vue');
 import vuetify from './plugins/vuetify.js' // path to vuetify export
 import router from "./router";
+import User from './helpers/user'
+window.User = User
+import StorageApp from './helpers/storage'
+window.StorageApp = StorageApp
+import Token from './helpers/token'
+window.Token = Token
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

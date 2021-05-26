@@ -16,6 +16,9 @@
         <home></home>
     </v-app>
 </div>
+<script>
+    window.baseURL = @json([route('auth.login'), route('auth.register')])
+</script>
 <script src="{{asset('js/app.js')}}"></script>
 </body>
 </html>
