@@ -1,46 +1,49 @@
 <template>
-    <v-form
-        ref="form"
-    >
-
-        <v-text-field
-            v-model="email"
-            label="E-mail"
-            :rules = "[!errors.email || errors.email[0]]"
-            required
-            type="email"
-        ></v-text-field>
-        <v-text-field
-            v-model="password"
-            label="password"
-            :rules = "[!errors.password || errors.password[0]]"
-            required
-            type="password"
-        ></v-text-field>
-
-        <!--            <v-checkbox-->
-        <!--                v-model="remember"-->
-        <!--                label="Remember?"-->
-        <!--            ></v-checkbox>-->
-
-        <v-btn
-            type="submit"
-            color="success"
-            class="mr-4 mt-2"
-            @click.prevent="login"
+    <v-container>
+        <v-form
+            ref="form"
         >
-            Login
-        </v-btn>
 
-        <router-link :to="{name:'register'}">
+            <v-text-field
+                v-model="email"
+                label="E-mail"
+                :rules = "[!errors.email || errors.email[0]]"
+                required
+                type="email"
+            ></v-text-field>
+            <v-text-field
+                v-model="password"
+                label="password"
+                :rules = "[!errors.password || errors.password[0]]"
+                required
+                type="password"
+            ></v-text-field>
+
+            <!--            <v-checkbox-->
+            <!--                v-model="remember"-->
+            <!--                label="Remember?"-->
+            <!--            ></v-checkbox>-->
+
             <v-btn
-                color="primary"
+                type="submit"
+                color="success"
                 class="mr-4 mt-2"
+                @click.prevent="login"
             >
-                Register
+                Login
             </v-btn>
-        </router-link>
-    </v-form>
+
+            <router-link :to="{name:'register'}">
+                <v-btn
+                    color="primary"
+                    class="mr-4 mt-2"
+                >
+                    Register
+                </v-btn>
+            </router-link>
+        </v-form>
+    </v-container>
+
 </template>
 
 <script>

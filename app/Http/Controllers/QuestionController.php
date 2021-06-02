@@ -36,14 +36,13 @@ class QuestionController extends Controller
     {
         //
         $data = $request->validate([
-            'title' => '',
-            'body' => '',
-            'category_id' => '',
-            'user_id' => ''
+            'title' => 'required',
+            'body' => 'required',
+            'category_id' => 'required',
         ]);
         $data['slug'] = Str::slug($data['title']);
-//        auth()->user()->questions()->create($data);
-        Question::create($data);
+        auth()->user()->questions()->create($data);
+//        Question::create($data);
         return \response()->success('Created', Response::HTTP_CREATED);
     }
 

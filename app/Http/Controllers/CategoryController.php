@@ -23,6 +23,7 @@ class CategoryController extends Controller
     public function index()
     {
         //
+        return response()->success(CategoryResource::collection(Category::all()));
     }
 
 

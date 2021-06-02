@@ -6,7 +6,7 @@
             <router-link :to="{name: 'forum'}">
                 <v-btn>Forum</v-btn>
             </router-link>
-            <router-link  v-if="loginAlready" to="/bar">
+            <router-link  v-if="loginAlready" :to="{name: 'questions.create'}">
                 <v-btn>Ask question</v-btn>
             </router-link>
             <router-link :to="{name: 'category'}">

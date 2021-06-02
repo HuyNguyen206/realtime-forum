@@ -29,16 +29,14 @@ class AppServiceProvider extends ServiceProvider
             return \response()->json([
                 'success' => true,
                 'data' => $data,
-                'code' => $code
-            ]);
+            ], $code);
         });
 
         Response::macro('error', function ($message, $code = 500){
             return \response()->json([
                 'success' => false,
                 'message' => $message,
-                'code' => $code
-            ]);
+            ], $code);
         });
     }
 }
