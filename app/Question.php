@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Question extends Model
 {
@@ -10,6 +11,16 @@ class Question extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    protected static function booted()
+    {
+        static::creating(function($question){
+            $question->slug = Str::slug($question->title);
+        });
+        static::updating(function($question){
+            $question->slug = Str::slug($question->title);
+        });
     }
 
     //

@@ -40,9 +40,7 @@ class QuestionController extends Controller
             'body' => 'required',
             'category_id' => 'required',
         ]);
-        $data['slug'] = Str::slug($data['title']);
         auth()->user()->questions()->create($data);
-//        Question::create($data);
         return \response()->success('Created', Response::HTTP_CREATED);
     }
 

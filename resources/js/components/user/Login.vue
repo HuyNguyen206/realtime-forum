@@ -71,14 +71,8 @@ export default {
                         User.repsonseLoginHandle(res)
                     })
                     .catch(err => {
-                        if(err.response.status == 422){
                             this.errors = err.response.data.errors
                             this.$refs.form.validate()
-                        }
-                        else{
-                            alert(err.response.data.error)
-                            console.log(err.response)
-                        }
                     })
         }
     },

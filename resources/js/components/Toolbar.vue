@@ -40,9 +40,7 @@ export default {
     },
     methods: {
         logout() {
-            axios.post('/api/auth/logout', {}, {
-                headers: {Authorization: `Bearer ${StorageApp.getToken()}`}
-            })
+            axios.post('/api/auth/logout')
             .then(res => {
                 User.logout();
                 // location.reload()

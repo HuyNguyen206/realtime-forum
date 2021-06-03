@@ -9,9 +9,16 @@
 <script>
 import Toolbar from "./Toolbar";
 import AppFooter from "./AppFooter";
+import EventBus from "../EventBus";
 export default {
     name: "Home",
-    components: {AppFooter, Toolbar}
+    components: {AppFooter, Toolbar},
+    data(){
+        return {
+            alert_success:false,
+            alertMessage:null
+        }
+    }
 }
 </script>
 

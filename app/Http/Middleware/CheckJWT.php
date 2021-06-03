@@ -30,7 +30,7 @@ class CheckJWT
             JWTAuth ::parseToken()->authenticate();
         } catch (Exception $e) {
             //
-            return response()->error($e->getMessage(), 500);
+            return response()->error(['message' => $e->getMessage(),'isJwt' => true], 500);
         }
         return $next($request);
     }

@@ -1,18 +1,5 @@
 <template>
     <v-container>
-        <v-alert
-            v-model="alert_success"
-            dismissible
-            type="success"
-        >
-            Question created successful!
-        </v-alert>
-        <v-alert type="error"
-                 v-model="alert_error"
-                 dismissible
-        >
-            {{ errorMessage }}
-        </v-alert>
         <v-form ref="form">
             <v-text-field
                 v-model="form.title"
@@ -21,11 +8,12 @@
                 required
                 type="email"
             ></v-text-field>
-            <v-textarea
-                v-model="form.body"
-                label="Body"
-                :rules="[!errors.body || errors.body[0]]"
-            ></v-textarea>
+            <vue-simplemde v-model="form.body" ref="markdownEditor" />
+<!--            <v-textarea-->
+<!--                v-model="form.body"-->
+<!--                label="Body"-->
+<!--                :rules="[!errors.body || errors.body[0]]"-->
+<!--            ></v-textarea>-->
             <v-select
                 v-model="form.category_id"
                 :rules="[!errors.category_id || errors.category_id[0]]"
@@ -62,7 +50,7 @@ export default {
                 category_id: null
             },
             errors: [],
-            alert_success: false,
+            // alert_success: false,
             alert_error: false,
             errorMessage: null
         }
@@ -81,31 +69,16 @@ export default {
     },
     methods: {
         createQuestion() {
-            axios.post('/api/questions', this.form, {
-                headers: {
-                    Authorization: `Bearer ${StorageApp.getToken()}`
-                }
-            })
+            axios.post('/api/questions', this.form)
                 .then(res => {
-                    this.alert_success = true
+                    this.$toastr.s('Question created successful', 'Success')
+                    this.$router.push({name: 'forum'})
                 })
                 .catch(err => {
-                    if(err.response.status != 422){
-                        this.errorMessage = err.response.data.message
-                        this.alert_error = true
-                        if(err.response.data.message == "Token has expired"){
-                            setTimeout(() => {
-                                User.logout();
-                                EventBus.$emit('isLogin', false)
-                                this.$router.push({name: 'login'})
-                            }, 1000)
-                        }
-                    }
-                    else{
+                    if(err.response.status == 422){
                         this.errors = err.response.data.errors
                         this.$refs.form.validate()
                     }
-
                 })
         }
     }
