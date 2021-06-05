@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -88,13 +89,15 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        $user = auth()->user();
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
             'user' => [
-                'id' => auth()->id(),
-                'name' => auth()->user()->name,
+                'id' => $user->id,
+                'name' => $user->name,
+                'is_admin' => $user->is_admin
             ]
         ]);
     }

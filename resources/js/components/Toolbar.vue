@@ -9,8 +9,8 @@
             <router-link  v-if="loginAlready" :to="{name: 'questions.create'}">
                 <v-btn>Ask question</v-btn>
             </router-link>
-            <router-link :to="{name: 'categories.create'}">
-                <v-btn>Add Category</v-btn>
+            <router-link v-if="isAdmin" :to="{name: 'categories.create'}">
+                <v-btn>Category</v-btn>
             </router-link>
             <router-link v-if="!loginAlready" :to="{name: 'login'}">
                 <v-btn>Login</v-btn>
@@ -31,11 +31,13 @@ export default {
     created() {
         EventBus.$on('isLogin', (isLogin) => {
             this.loginAlready = isLogin
+            this.isAdmin = User.isAdmin()
         })
     },
     data() {
         return {
-            loginAlready: User.loginAlready()
+            loginAlready: User.loginAlready(),
+            isAdmin: User.isAdmin()
         }
     },
     methods: {

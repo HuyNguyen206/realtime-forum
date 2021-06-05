@@ -40,8 +40,8 @@ class CategoryController extends Controller
            'name' => 'required'
         ]);
         $data['slug'] = Str::slug($data['name']);
-        Category::create($data);
-        return response()->success(null, 201);
+        $category = Category::create($data);
+        return response()->success(new CategoryResource($category), 201);
     }
 
     /**
@@ -74,7 +74,7 @@ class CategoryController extends Controller
         ]);
         $data['slug'] = Str::slug($data['name']);
         $category->update($data);
-        return response()->success($category, 200);
+        return response()->success( new CategoryResource($category), 200);
     }
 
     /**

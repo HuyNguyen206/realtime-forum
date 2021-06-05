@@ -25,6 +25,11 @@ class User {
         return this.loginAlready() ? StorageApp.getTokenData().user : null
     }
 
+    isAdmin(){
+        let userInfo = this.userInfo()
+        return userInfo ? userInfo.is_admin : false
+    }
+
     isOwnQuestion(owner_id){
         let userInfo = this.userInfo()
         return userInfo ? owner_id == userInfo.id : false

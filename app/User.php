@@ -37,6 +37,7 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    protected $appends = ['is_admin'];
 
     public function likedReplies(){
         return $this->belongsToMany(Reply::class, 'likes');
@@ -72,5 +73,9 @@ class User extends Authenticatable implements JWTSubject
 
     public function setPasswordAttribute($value){
         $this->attributes['password'] = bcrypt($value);
+    }
+
+    public function getisAdminAttribute(){
+        return $this->role == 'admin';
     }
 }

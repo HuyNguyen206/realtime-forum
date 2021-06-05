@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class QuestionResource extends JsonResource
 {
@@ -15,6 +16,8 @@ class QuestionResource extends JsonResource
      */
     public function toArray($request)
     {
+        $replies = $this->replies;
+        $replyCount = $replies->count();
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -25,6 +28,8 @@ class QuestionResource extends JsonResource
             'user_id' => $this->user_id,
             'category_id' => $this->category_id,
             'created_at' => $this->created_at->toFormattedDateString(),
+            'replies' => ReplyResource::collection($replies),
+            'replies_count' => $replyCount.' '.Str::plural('reply', $replyCount)
         ];
     }
 }
