@@ -2,10 +2,10 @@
     <v-container fluid>
         <v-row>
             <v-col cols="7">
-                <question v-for="question in questions" :question="question" :key="question.id"></question>
+                <question class="mt-2" v-for="question in questions" :question="question" :key="question.id"></question>
             </v-col>
             <v-col>
-                Sidebar
+                <side-bar></side-bar>
             </v-col>
         </v-row>
     </v-container>
@@ -13,10 +13,11 @@
 
 <script>
 import Question from "./Question";
+import SideBar from "./SideBar";
 
 export default {
     name: "Forum",
-    components: {Question},
+    components: {Question, SideBar},
      data() {
         return {
             questions: {}

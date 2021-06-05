@@ -1,6 +1,5 @@
 <template>
-    <v-card
-    >
+    <v-card>
         <v-card-title>
             <router-link :to="{ name: 'questions.show', params:{slug: question.slug, questionDetail: question}}">
                 {{ question.title }}

@@ -9,8 +9,8 @@
             <router-link  v-if="loginAlready" :to="{name: 'questions.create'}">
                 <v-btn>Ask question</v-btn>
             </router-link>
-            <router-link :to="{name: 'category'}">
-                <v-btn>Category</v-btn>
+            <router-link :to="{name: 'categories.create'}">
+                <v-btn>Add Category</v-btn>
             </router-link>
             <router-link v-if="!loginAlready" :to="{name: 'login'}">
                 <v-btn>Login</v-btn>

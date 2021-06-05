@@ -22,6 +22,8 @@ class QuestionResource extends JsonResource
             'slug' => $this->slug,
             'body' => $this->body,
             'user' => $this->user->name,
+            'user_id' => $this->user_id,
+            'category_id' => $this->category_id,
             'created_at' => $this->created_at->toFormattedDateString(),
         ];
     }

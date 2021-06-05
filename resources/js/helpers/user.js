@@ -25,6 +25,11 @@ class User {
         return this.loginAlready() ? StorageApp.getTokenData().user : null
     }
 
+    isOwnQuestion(owner_id){
+        let userInfo = this.userInfo()
+        return userInfo ? owner_id == userInfo.id : false
+    }
+
     logout(){
         StorageApp.clearToken()
     }

@@ -25,9 +25,8 @@ import 'simplemde/dist/simplemde.min.css'
 import VueToastr from "vue-toastr";
 // use plugin
 Vue.use(VueToastr);
-// const jwtToken = localStorage.getItem('token') ? `Bearer ${JSON.parse(localStorage.getItem('token')).access_token}` : null
-// window.axios.defaults.headers.common['Authorization'] = jwtToken;
-
+import md from 'marked'
+window.md = md
 
 /**
  * The following block of code may be used to automatically register your

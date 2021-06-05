@@ -6,6 +6,8 @@ import Register from "./components/user/Register";
 import Forum from "./components/Forum";
 import QuestionDetail from "./components/QuestionDetail";
 import QuestionCreate from "./components/QuestionCreate";
+import QuestionEdit from "./components/QuestionEdit";
+import CategoryCreate from "./components/category/CategoryCreate";
 
 Vue.use(VueRouter)
 const routes = [
@@ -14,7 +16,9 @@ const routes = [
     { path: '/register', component: Register, name: 'register'},
     { path: '/forum', component: Forum, name: 'forum'},
     { path: '/question/create', component: QuestionCreate, name: 'questions.create'},
-    { path: '/question/:slug', component: QuestionDetail, name: 'questions.show'}
+    { path: '/question/:slug', component: QuestionDetail, name: 'questions.show'},
+    { path: '/question/edit/:slug', component: QuestionEdit, name: 'questions.edit'},
+    { path: '/categories/create', component: CategoryCreate, name: 'categories.create'}
 ]
 
 const router = new VueRouter({

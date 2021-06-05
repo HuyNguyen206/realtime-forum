@@ -38,9 +38,10 @@
 </template>
 
 <script>
-import EventBus from "../EventBus";
+import CheckLogin from "./mixins/CheckLogin";
 export default {
     name: "QuestionCreate",
+    mixins: [CheckLogin],
     data() {
         return {
             categories: [],
@@ -49,16 +50,12 @@ export default {
                 body: null,
                 category_id: null
             },
-            errors: [],
             // alert_success: false,
             alert_error: false,
             errorMessage: null
         }
     },
     created() {
-        if(!User.loginAlready()){
-            this.$router.push({name : 'login'})
-        }
         axios.get('/api/categories')
             .then(res => {
                 this.categories = res.data.data
