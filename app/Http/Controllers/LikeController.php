@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ReplyResource;
 use App\Like;
 use App\Question;
 use App\Reply;
@@ -91,6 +92,6 @@ class LikeController extends Controller
 
     public function toggle(Reply $reply){
         auth()->user()->likedReplies()->toggle($reply);
-        return response()->success('Success', 201);
+        return response()->success(new ReplyResource($reply), 201);
     }
 }

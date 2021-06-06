@@ -6,7 +6,7 @@
                 {{ questionDetail.title }}
 
                 <v-spacer></v-spacer>
-                <v-btn color="teal">{{questionDetail.replies_count}}</v-btn>
+                <v-btn color="teal">{{ repliesCount }}</v-btn>
             </v-card-title>
             <v-card-subtitle class="pb-0">
                 {{ questionDetail.created_at }}
@@ -33,26 +33,39 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
-        <v-card
-            v-if="questionDetail">
-            <v-card-title>
-                Replies
-                <v-spacer></v-spacer>
-            </v-card-title>
-            <div v-for="(reply, index) in questionDetail.replies"  :key="index">
-                <v-divider
-                    v-if="index != 0"
-                ></v-divider>
-                <reply :reply="reply"></reply>
-            </div>
-        </v-card>
+        <div v-if="questionDetail">
+            <v-card class="pb-2" v-if="isLoginAlready">
+                <v-card-title>
+                    New Reply
+                    <v-spacer></v-spacer>
+                </v-card-title>
+                <v-divider></v-divider>
+                <reply-create @replyCreate="updateReplies" :question_slug="questionDetail.slug"></reply-create>
+            </v-card>
+            <v-card class="mt-2">
+                <v-card-title>
+                    Replies
+                    <v-spacer></v-spacer>
+                </v-card-title>
+                <div v-for="(reply, index) in questionDetail.replies" :key="index">
+                    <v-divider
+                        v-if="index != 0"
+                    ></v-divider>
+                    <reply @replyLikeUpdate="updateReplies" @replyUpdate="updateReplies" @replyDelete="updateReplies" :reply="reply"
+                           :index="index"></reply>
+                </div>
+            </v-card>
+        </div>
+
     </div>
 </template>
 <script>
 import Reply from "./replies/Reply";
+import ReplyCreate from "./replies/ReplyCreate";
+
 export default {
     name: "QuestionDetail",
-    components: {Reply},
+    components: {Reply, ReplyCreate},
     data() {
         return {
             questionDetail: this.$route.params.questionDetail || null,
@@ -60,20 +73,54 @@ export default {
 
     },
     computed: {
+        repliesCount() {
+            let replyCount = this.questionDetail.replies.length
+            return replyCount + ' ' + (replyCount > 1 ? 'replies' : 'reply')
+        },
         isOwnQuestion() {
-           return  User.isOwnQuestion(this.questionDetail.user_id)
+            return User.isOwnQuestion(this.questionDetail.user_id)
+        },
+        isLoginAlready() {
+            return User.loginAlready()
         }
     },
-    methods:{
-        deleteQuestion(){
+    methods: {
+        deleteQuestion() {
             axios.delete(`/api/questions/${this.questionDetail.slug}`)
-            .then(res => {
-                this.$toastr.s('Delete question success', 'Success')
-                this.$router.push({name :'forum'})
-            })
-            .catch(err => {
-                console.log(err.response)
-            })
+                .then(res => {
+                    this.$toastr.s('Delete question success', 'Success')
+                    this.$router.push({name: 'forum'})
+                })
+                .catch(err => {
+                    console.log(err.response)
+                })
+        },
+        updateReplies(data) {
+            // newReply can be either object or index
+            switch (data.type) {
+                case 'create':
+                    this.questionDetail.replies.unshift(data.reply)
+                    break
+                case 'delete':
+                    this.questionDetail.replies.splice(data.index, 1)
+                    break
+                case 'update':
+                    this.questionDetail.replies.splice(data.index, 1, data.reply)
+                    break
+                case 'likeToggleReply':
+                    this.$set(this.questionDetail.replies, data.index, data.reply)
+                    // this.questionDetail.replies.splice(data.index, 1, data.reply)
+                    // this.questionDetail.replies[data.index] = data.reply
+                    break
+            }
+            // if (typeof newReply === 'object' && newReply !== null) {
+            //     this.questionDetail.replies.unshift(newReply)
+            // }
+            // //Remove question
+            // else {
+            //     this.questionDetail.replies.splice(newReply, 1)
+            // }
+
         }
     },
     created() {

@@ -35,6 +35,15 @@ class User {
         return userInfo ? owner_id == userInfo.id : false
     }
 
+    isOwnReply(owner_id){
+        let userInfo = this.userInfo()
+        return userInfo ? owner_id == userInfo.id : false
+    }
+    isLikeReply(owner_id){
+        let userInfo = this.userInfo()
+        return userInfo ? owner_id == userInfo.id : false
+    }
+
     logout(){
         StorageApp.clearToken()
     }

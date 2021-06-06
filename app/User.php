@@ -40,7 +40,7 @@ class User extends Authenticatable implements JWTSubject
     protected $appends = ['is_admin'];
 
     public function likedReplies(){
-        return $this->belongsToMany(Reply::class, 'likes');
+        return $this->belongsToMany(Reply::class, 'likes')->withTimestamps();
     }
 
     public function replies(){
@@ -78,4 +78,9 @@ class User extends Authenticatable implements JWTSubject
     public function getisAdminAttribute(){
         return $this->role == 'admin';
     }
+
+   public function likeReply($reply){
+        return $reply->likedUsers->contains('id', $this->id);
+   }
+
 }

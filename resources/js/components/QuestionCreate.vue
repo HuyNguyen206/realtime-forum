@@ -9,11 +9,6 @@
                 type="email"
             ></v-text-field>
             <vue-simplemde v-model="form.body" ref="markdownEditor" />
-<!--            <v-textarea-->
-<!--                v-model="form.body"-->
-<!--                label="Body"-->
-<!--                :rules="[!errors.body || errors.body[0]]"-->
-<!--            ></v-textarea>-->
             <v-select
                 v-model="form.category_id"
                 :rules="[!errors.category_id || errors.category_id[0]]"

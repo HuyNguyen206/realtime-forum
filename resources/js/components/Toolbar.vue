@@ -47,6 +47,7 @@ export default {
                 User.logout();
                 // location.reload()
                 this.loginAlready = false
+                this.isAdmin = false
                 // EventBus.$emit('isLogin', false)
                 this.$router.push({name: 'login'})
             })

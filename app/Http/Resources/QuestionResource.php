@@ -29,7 +29,7 @@ class QuestionResource extends JsonResource
             'category_id' => $this->category_id,
             'created_at' => $this->created_at->toFormattedDateString(),
             'replies' => ReplyResource::collection($replies),
-            'replies_count' => $replyCount.' '.Str::plural('reply', $replyCount)
+//            'replies_count' => $replyCount.' '.Str::plural('reply', $replyCount)
         ];
     }
 }

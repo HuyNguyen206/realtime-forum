@@ -36,12 +36,11 @@ class ReplyController extends Controller
     {
         //
         $data = $request->validate([
-           'body' => '',
-            'user_id' => ''
+           'body' => 'required',
         ]);
-//        $data['']
-        $question->replies()->create($data);
-        return response('Created', 200);
+        $data['user_id'] = auth()->id();
+        $reply = $question->replies()->create($data);
+        return response()->success(new ReplyResource($reply), 200);
     }
 
     /**
@@ -68,10 +67,10 @@ class ReplyController extends Controller
     {
         //
         $data = $request->validate([
-            'body' => ''
+            'body' => 'required'
         ]);
         $reply->update($data);
-        return response($reply, 200);
+        return response()->success(new ReplyResource($reply) , 200);
     }
 
     /**
