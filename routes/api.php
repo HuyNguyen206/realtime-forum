@@ -25,7 +25,9 @@ Route::group([
     Route::get('payload', 'AuthController@payload');
 
 });
-
+Route::get('notifications', 'NotificationController@getNotification');
+Route::get('notifications/unread', 'NotificationController@getUnreadNotification');
+Route::patch('notifications/mark-as-read/{notifyId}', 'NotificationController@markReadNotification');
 Route::apiResource('questions', 'QuestionController');
 Route::apiResource('categories', 'CategoryController');
 Route::apiResource('questions.replies', 'ReplyController')->shallow();

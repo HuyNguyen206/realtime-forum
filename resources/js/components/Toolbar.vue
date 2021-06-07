@@ -2,6 +2,7 @@
     <v-toolbar dense style="margin: 10px">
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
+        <notification v-if="loginAlready"></notification>
         <div style="margin: 10px 0; display: flex; align-items: center">
             <router-link :to="{name: 'forum'}">
                 <v-btn>Forum</v-btn>
@@ -26,8 +27,10 @@
 </template>
 <script>
 import EventBus from "../EventBus";
+import Notification from "./notification/Notification";
 export default {
     name: "Toolbar",
+    components:{Notification},
     created() {
         EventBus.$on('isLogin', (isLogin) => {
             this.loginAlready = isLogin
@@ -37,7 +40,7 @@ export default {
     data() {
         return {
             loginAlready: User.loginAlready(),
-            isAdmin: User.isAdmin()
+            isAdmin: User.isAdmin(),
         }
     },
     methods: {
