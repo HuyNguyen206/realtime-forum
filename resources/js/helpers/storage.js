@@ -9,7 +9,8 @@ class StorageApp {
          localStorage.removeItem('token')
     }
     getToken(){
-        return JSON.parse(localStorage.getItem('token')) .access_token
+         let token = JSON.parse(localStorage.getItem('token'))
+        return token ? token.access_token : null
     }
 }
 

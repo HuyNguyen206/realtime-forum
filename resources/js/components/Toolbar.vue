@@ -2,12 +2,12 @@
     <v-toolbar dense style="margin: 10px">
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
-        <notification v-if="loginAlready"></notification>
+        <notification @markAsRead="markAsRead" :notifications="notifications" v-if="loginAlready"></notification>
         <div style="margin: 10px 0; display: flex; align-items: center">
             <router-link :to="{name: 'forum'}">
                 <v-btn>Forum</v-btn>
             </router-link>
-            <router-link  v-if="loginAlready" :to="{name: 'questions.create'}">
+            <router-link v-if="loginAlready" :to="{name: 'questions.create'}">
                 <v-btn>Ask question</v-btn>
             </router-link>
             <router-link v-if="isAdmin" :to="{name: 'categories.create'}">
@@ -28,32 +28,65 @@
 <script>
 import EventBus from "../EventBus";
 import Notification from "./notification/Notification";
+
 export default {
     name: "Toolbar",
-    components:{Notification},
+    components: {Notification},
     created() {
         EventBus.$on('isLogin', (isLogin) => {
             this.loginAlready = isLogin
             this.isAdmin = User.isAdmin()
+            if(isLogin){
+                axios.get(`/api/notifications/unread`)
+                    .then(res => {
+                        this.notifications = res.data.data
+                    })
+                this.subscribeChannel()
+            }
         })
+        if (this.loginAlready) {
+            axios.get(`/api/notifications/unread`)
+                .then(res => {
+                    this.notifications = res.data.data
+                })
+            this.subscribeChannel()
+        }
     },
     data() {
         return {
             loginAlready: User.loginAlready(),
             isAdmin: User.isAdmin(),
+            notifications: []
         }
     },
     methods: {
+        subscribeChannel(){
+            Echo.connector.pusher.config.auth.headers.Authorization = 'Bearer ' + StorageApp.getToken()
+            Echo.private('App.User.' + User.userInfo().id)
+                .notification((notification) => {
+                    this.notifications.unshift(notification)
+                    this.$toastr.s(notification.data.message, 'Notification')
+                    // Echo.leaveChannel('App.User.' + User.userInfo().id);
+                    console.log(notification.type);
+                });
+        },
+        markAsRead(index){
+            let notification = this.notifications[index]
+            this.notifications.splice(index,1)
+            this.$router.push({name: 'questions.show', params: {slug: notification.data.question.slug}})
+        },
         logout() {
             axios.post('/api/auth/logout')
-            .then(res => {
-                User.logout();
-                // location.reload()
-                this.loginAlready = false
-                this.isAdmin = false
-                // EventBus.$emit('isLogin', false)
-                this.$router.push({name: 'login'})
-            })
+                .then(res => {
+                    let channel = 'App.User.' + User.userInfo().id
+                    User.logout();
+                    // location.reload()
+                    this.loginAlready = false
+                    this.isAdmin = false
+                    Echo.leave(channel);
+                    // EventBus.$emit('isLogin', false)
+                    this.$router.push({name: 'login'})
+                })
         }
     },
 }

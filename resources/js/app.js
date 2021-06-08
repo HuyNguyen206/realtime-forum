@@ -26,7 +26,14 @@ import VueToastr from "vue-toastr";
 // use plugin
 Vue.use(VueToastr);
 import md from 'marked'
+import Echo from "laravel-echo";
 window.md = md
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: process.env.MIX_PUSHER_APP_KEY,
+    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    forceTLS: true,
+});
 
 /**
  * The following block of code may be used to automatically register your

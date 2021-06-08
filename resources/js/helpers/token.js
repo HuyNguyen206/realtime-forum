@@ -6,7 +6,6 @@ class Token {
 
     isValid(token){
         let payload = this.payload(token)
-        console.log(payload)
         return payload ? baseURL.some((validISS) => {
             return payload.iss == validISS
         }) : false

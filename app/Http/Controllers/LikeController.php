@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\LikeEvent;
 use App\Http\Resources\ReplyResource;
 use App\Like;
 use App\Question;
@@ -91,7 +92,11 @@ class LikeController extends Controller
     }
 
     public function toggle(Reply $reply){
-        auth()->user()->likedReplies()->toggle($reply);
+        $user = auth()->user();
+        $likeReplies = $user->likedReplies();
+        $isDisLike = $user->likedReplies->where('id',$reply->id)->count() > 0;
+        $likeReplies->toggle($reply);
+        broadcast(new LikeEvent($reply->id, $isDisLike))->toOthers();
         return response()->success(new ReplyResource($reply), 201);
     }
 }

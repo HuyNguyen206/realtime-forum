@@ -64,6 +64,26 @@ export default {
             // parseBody: md.parse(this.reply.body)
         }
     },
+    created() {
+        console.log('listten event')
+        Echo.channel('like-channel')
+            .listen('LikeEvent', (e) => {
+                if(e.replyId == this.reply.id){
+                    let reply = {...this.reply}
+                    reply.like_count = e.isDisLike ? reply.like_count -1 : reply.like_count + 1
+                    this.$emit('replyUpdate', {reply, type: 'update', index: this.index})
+                }
+                console.log(e);
+            });
+
+        Echo.channel('reply-channel')
+            .listen('DeleteReplyEvent', (e) => {
+                if(e.replyId == this.reply.id){
+                    this.$emit('replyDelete', {index: this.index, type: 'delete'})
+                }
+                console.log(e);
+            });
+    },
     computed: {
         isOwnReply() {
             return User.isOwnReply(this.reply.user_id)

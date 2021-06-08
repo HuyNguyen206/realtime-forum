@@ -135,6 +135,11 @@ export default {
         } else {
             this.questionDetail.body = md.parse(this.questionDetail.body)
         }
+
+        Echo.private('App.User.' + User.userInfo().id)
+            .notification((notification) => {
+                this.questionDetail.replies.unshift(notification.reply)
+            });
     }
 }
 </script>

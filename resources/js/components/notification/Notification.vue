@@ -25,10 +25,12 @@
             </template>
             <v-list>
                 <v-list-item link v-for="(notification, index) in notifications" :key="index">
-                    <v-list-item-title @click="markAsRead(index)" v-text="notification.data.message">}</v-list-item-title>
+                    <v-list-item-title @click="markAsRead(index)" v-text="notification.data.message">}
+                    </v-list-item-title>
                 </v-list-item>
                 <v-list-item link>
-                    <router-link style="text-decoration: none" :to="{name:'notifications.index'}">Go to notification page
+                    <router-link style="text-decoration: none" :to="{name:'notifications.index'}">Go to notification
+                        page
                     </router-link>
                 </v-list-item>
 
@@ -40,39 +42,22 @@
 <script>
 export default {
     name: "Notification",
-    data(){
-        return {
-            notifications: []
-        }
-    },
-    created() {
-        if(User.loginAlready()){
-            axios.get(`/api/notifications/unread`)
-                .then(res => {
-                    this.notifications = res.data.data
-                })
-            .catch(err => {
-                console.log(err.response)
-            })
-        }
-
-    },
+    props: ['notifications'],
     computed: {
         count() {
-        return this.notifications.length
+            return this.notifications.length
         }
     },
-    methods:{
-        markAsRead(index){
+    methods: {
+        markAsRead(index) {
             let notification = this.notifications[index]
             axios.patch(`/api/notifications/mark-as-read/${notification.id}`)
-            .then(res => {
-                this.notifications.splice(index, 1)
-                this.$router.push({name: 'questions.show', params:{slug: notification.data.question.slug}})
-            })
-            .catch(err => {
-                console.log(err.response)
-            })
+                .then(res => {
+                    this.$emit('markAsRead', index)
+                })
+                .catch(err => {
+                    console.log(err.response)
+                })
 
         }
     }
