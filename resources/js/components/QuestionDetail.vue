@@ -35,12 +35,17 @@
         </v-card>
         <div v-if="questionDetail">
             <v-card class="pb-2" v-if="isLoginAlready">
-                <v-card-title>
+                <v-card-title >
                     New Reply
                     <v-spacer></v-spacer>
                 </v-card-title>
+                <div>
+                </div>
                 <v-divider></v-divider>
                 <reply-create @replyCreate="updateReplies" :question_slug="questionDetail.slug"></reply-create>
+            </v-card>
+            <v-card v-else class="m-2 pl-2">
+                <router-link :to="{name: 'login'}" style="text-decoration: none"> <v-btn color="green" dark>Login to reply</v-btn></router-link>
             </v-card>
             <v-card class="mt-2">
                 <v-card-title>
@@ -135,11 +140,12 @@ export default {
         } else {
             this.questionDetail.body = md.parse(this.questionDetail.body)
         }
-
-        Echo.private('App.User.' + User.userInfo().id)
-            .notification((notification) => {
-                this.questionDetail.replies.unshift(notification.reply)
-            });
+        if(User.loginAlready()){
+            Echo.private('App.User.' + User.userInfo().id)
+                .notification((notification) => {
+                    this.questionDetail.replies.unshift(notification.reply)
+                });
+        }
     }
 }
 </script>

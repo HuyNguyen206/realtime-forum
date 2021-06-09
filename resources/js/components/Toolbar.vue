@@ -1,26 +1,27 @@
 <template>
-    <v-toolbar dense style="margin: 10px">
+    <v-toolbar color="indigo" dark dense style="margin: 10px">
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <notification @markAsRead="markAsRead" :notifications="notifications" v-if="loginAlready"></notification>
         <div style="margin: 10px 0; display: flex; align-items: center">
-            <router-link :to="{name: 'forum'}">
-                <v-btn>Forum</v-btn>
+            <router-link :to="{name: 'forum'}" style="text-decoration: none">
+                <v-btn icon class="px-14">Forum</v-btn>
+
             </router-link>
-            <router-link v-if="loginAlready" :to="{name: 'questions.create'}">
-                <v-btn>Ask question</v-btn>
+            <router-link v-if="loginAlready" :to="{name: 'questions.create'}" style="text-decoration: none">
+                <v-btn icon class="px-14">Ask question</v-btn>
             </router-link>
-            <router-link v-if="isAdmin" :to="{name: 'categories.create'}">
-                <v-btn>Category</v-btn>
+            <router-link v-if="isAdmin" :to="{name: 'categories.create'}" style="text-decoration: none">
+                <v-btn icon class="px-14">Category</v-btn>
             </router-link>
-            <router-link v-if="!loginAlready" :to="{name: 'login'}">
-                <v-btn>Login</v-btn>
+            <router-link v-if="!loginAlready" :to="{name: 'login'}" style="text-decoration: none">
+                <v-btn icon class="px-14">Login</v-btn>
             </router-link>
-            <router-link v-if="!loginAlready" :to="{name: 'register'}">
-                <v-btn>Register</v-btn>
+            <router-link v-if="!loginAlready" :to="{name: 'register'}" style="text-decoration: none">
+                <v-btn icon class="px-14" >Register</v-btn>
             </router-link>
-            <a href='' v-if="loginAlready" @click.prevent="logout">
-                <v-btn>Logout</v-btn>
+            <a href='' v-if="loginAlready" @click.prevent="logout" style="text-decoration: none">
+                <v-btn icon class="px-14">Logout</v-btn>
             </a>
         </div>
     </v-toolbar>
