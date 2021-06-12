@@ -9,20 +9,21 @@
                 type="email"
             ></v-text-field>
             <v-btn v-if="!editSlug"
-                type="submit"
-                color="success"
-                class="mr-4 mt-2"
-                @click.prevent="createCategory"
+                   type="submit"
+                   color="success"
+                   class="mr-4 mt-2"
+                   @click.prevent="createCategory"
+                   :disabled="isDisable"
             >
                 Create
             </v-btn>
             <v-btn v-else
-                type="submit"
-                color="success"
-                class="mr-4 mt-2"
-                @click.prevent="updateCategory"
+                   type="submit"
+                   color="success"
+                   class="mr-4 mt-2"
+                   @click.prevent="updateCategory"
             >
-               Update
+                Update
             </v-btn>
 
         </v-form>
@@ -44,10 +45,10 @@
                         v-if="index != 0"
                     ></v-divider>
                     <v-list-item :class="{'blue':editIndex == index ,'lighten-4': editIndex == index}"
-                        :key="index"
+                                 :key="index"
                     >
-                        <v-list-item-content >
-                            <v-list-item-title  v-text="item.name"></v-list-item-title>
+                        <v-list-item-content>
+                            <v-list-item-title v-text="item.name"></v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
                             <v-btn icon @click="editCategory(index)">
@@ -73,61 +74,64 @@ import CheckAdmin from "../mixins/CheckAdmin";
 export default {
     name: "CategoryCreate",
     mixins: [CheckLogin, CheckAdmin],
-    data(){
-       return {
-           editIndex: null,
-           editSlug: null,
-           name: null,
-           categories:[]
-       }
+    data() {
+        return {
+            editIndex: null,
+            editSlug: null,
+            name: null,
+            categories: []
+        }
     },
-    methods:{
-        createCategory(){
+    methods: {
+        createCategory() {
             axios.post(`/api/categories`, {name: this.name})
-            .then(res => {
-                this.$toastr.s('Category was created success', 'Success')
-                this.categories.unshift(res.data.data)
-                this.name=null
-            })
-            .catch(err => {
-                console.log(err.response)
-                if(err.response.status == 422){
-                    this.errors = err.response.data.errors
-                    this.$refs.form.validate()
-                }
-            })
+                .then(res => {
+                    this.$toastr.s('Category was created success', 'Success')
+                    this.categories.unshift(res.data.data)
+                    this.name = null
+                })
+                .catch(err => {
+                    console.log(err.response)
+                    if (err.response.status == 422) {
+                        this.errors = err.response.data.errors
+                        this.$refs.form.validate()
+                    }
+                })
         },
-        deleteCategory(slug, index){
+        deleteCategory(slug, index) {
             axios.delete(`/api/categories/${slug}`)
-            .then(res => {
-                this.$toastr.s('Delete category success', 'Success');
-                this.categories.splice(index,1)
-            })
-            .catch(err => {
-                console.log(err.response)
-            })
+                .then(res => {
+                    this.$toastr.s('Delete category success', 'Success');
+                    this.categories.splice(index, 1)
+                })
+                .catch(err => {
+                    console.log(err.response)
+                })
         },
-        editCategory(index){
+        editCategory(index) {
             let item = this.categories[index]
             this.editSlug = item.slug
             this.name = item.name
             this.editIndex = index
         },
-        updateCategory(){
+        updateCategory() {
             axios.put(`/api/categories/${this.editSlug}`, {name: this.name})
-            .then(res => {
-                this.$toastr.s('Update category success', 'Success')
-                this.categories.splice(this.editIndex, 1, res.data.data)
-            })
-            .catch(err => {
-                console.log(err.response)
-            })
+                .then(res => {
+                    this.$toastr.s('Update category success', 'Success')
+                    this.categories.splice(this.editIndex, 1, res.data.data)
+                })
+                .catch(err => {
+                    console.log(err.response)
+                })
         }
     },
-    computed:{
-      action(){
-          return this.isCreate ? 'Create' : 'Update'
-      }
+    computed: {
+        action() {
+            return this.isCreate ? 'Create' : 'Update'
+        },
+        isDisable() {
+            return !this.name
+        }
     },
     created() {
         axios.get('/api/categories')

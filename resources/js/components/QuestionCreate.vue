@@ -8,7 +8,9 @@
                 required
                 type="email"
             ></v-text-field>
+
             <vue-simplemde v-model="form.body" ref="markdownEditor" />
+            <span class="red--text" v-if="errors.body">{{errors.body[0]}}</span>
             <v-select
                 v-model="form.category_id"
                 :rules="[!errors.category_id || errors.category_id[0]]"
@@ -20,6 +22,7 @@
                 autocomplete
             ></v-select>
             <v-btn
+                :disabled="isDisable"
                 type="submit"
                 color="success"
                 class="mr-4 mt-2"
@@ -72,6 +75,11 @@ export default {
                         this.$refs.form.validate()
                     }
                 })
+        }
+    },
+    computed:{
+        isDisable(){
+            return !this.form.body || !this.form.title || !this.form.category_id
         }
     }
 }

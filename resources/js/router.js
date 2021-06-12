@@ -9,9 +9,12 @@ import QuestionCreate from "./components/QuestionCreate";
 import QuestionEdit from "./components/QuestionEdit";
 import CategoryCreate from "./components/category/CategoryCreate";
 import NotificationList from "./components/notification/NotificationList";
+import MainPage from "./components/MainPage";
+
 
 Vue.use(VueRouter)
 const routes = [
+    { path: '/', component: MainPage, name: 'welcome' },
     { path: '/login', component: Login, name: 'login' },
     { path: '/category', component: Category, name: 'category'},
     { path: '/register', component: Register, name: 'register'},

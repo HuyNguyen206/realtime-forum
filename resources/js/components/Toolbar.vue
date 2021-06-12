@@ -1,6 +1,13 @@
 <template>
     <v-toolbar color="indigo" dark dense style="margin: 10px">
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        <v-toolbar-title>
+            <router-link style="text-decoration: none" :to="{name: 'welcome'}">
+                <v-btn icon>
+                    <v-icon>
+                        home
+                    </v-icon>
+                </v-btn></router-link>
+        </v-toolbar-title>
         <v-spacer></v-spacer>
         <notification @markAsRead="markAsRead" :notifications="notifications" v-if="loginAlready"></notification>
         <div style="margin: 10px 0; display: flex; align-items: center">
@@ -67,6 +74,8 @@ export default {
                 .notification((notification) => {
                     this.notifications.unshift(notification)
                     this.$toastr.s(notification.data.message, 'Notification')
+                    let alert = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3')
+                    alert.play()
                     // Echo.leaveChannel('App.User.' + User.userInfo().id);
                     console.log(notification.type);
                 });
